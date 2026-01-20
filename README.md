@@ -58,9 +58,11 @@ This project follows a dual-phase evolution path:
 
 ## 📄 Documentation
 
-*   [Implementation Plan](./docs/implementation_plan.md)
-*   [Architecture Design](./docs/architecture_design.md)
-*   [Product Requirements](./docs/requirements_prd.md)
+*   [Implementation Plan](./docs/实施计划.md)
+*   [Architecture Design](./docs/架构设计.md)
+*   [Product Requirements](./docs/产品需求.md)
+*   [Context Memory Engineering](./docs/形成上下文记忆工程.md)
+*   [AIOps Ops Template](./docs/AIOps运维模板.md)
 
 ## 🤝 Contributing
 
