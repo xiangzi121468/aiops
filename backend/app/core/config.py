@@ -16,6 +16,8 @@ class Settings(BaseSettings):
     
     # OpenAI / LLM
     OPENAI_API_KEY: Optional[str] = None
+    OPENAI_MODEL: str = "gpt-4o-mini"
+    LLM_PROVIDER: str = "openai"
     
     class Config:
         env_file = ".env"
