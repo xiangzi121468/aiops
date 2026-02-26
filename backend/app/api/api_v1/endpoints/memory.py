@@ -1,9 +1,10 @@
 from typing import Any, Dict, List, Optional
 
 from fastapi import APIRouter, Depends, HTTPException
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 from sqlalchemy.orm import Session
 
+from app.api import deps
 from app.db.session import get_db
 from app.memory.service import (
     record_episodic,
@@ -16,24 +17,27 @@ router = APIRouter()
 
 
 class MemoryRecordRequest(BaseModel):
-    type: str
-    key: Optional[str] = None
-    value: Optional[str] = None
-    confidence: float = 1.0
+    type: str = Field(min_length=1, max_length=20)
+    key: Optional[str] = Field(default=None, max_length=200)
+    value: Optional[str] = Field(default=None, max_length=2000)
+    confidence: float = Field(default=1.0, ge=0.0, le=1.0)
     source: str = "conversation"
-    content: Optional[str] = None
+    content: Optional[str] = Field(default=None, max_length=5000)
     metadata: Optional[Dict[str, Any]] = None
 
 
 class MemoryRecallRequest(BaseModel):
-    type: str
-    query: Optional[str] = None
-    limit: int = 10
+    type: str = Field(min_length=1, max_length=20)
+    query: Optional[str] = Field(default=None, max_length=200)
+    limit: int = Field(default=10, ge=1, le=50)
 
 
 @router.post("/memory/record")
 def record_memory(
-    payload: MemoryRecordRequest, db: Session = Depends(get_db)
+    payload: MemoryRecordRequest,
+    db: Session = Depends(get_db),
+    _user=Depends(deps.get_current_user),
+    _rate=Depends(deps.rate_limit),
 ) -> Dict[str, Any]:
     if payload.type == "semantic":
         if not payload.key or not payload.value:
@@ -58,7 +62,10 @@ def record_memory(
 
 @router.post("/memory/recall")
 def recall_memory(
-    payload: MemoryRecallRequest, db: Session = Depends(get_db)
+    payload: MemoryRecallRequest,
+    db: Session = Depends(get_db),
+    _user=Depends(deps.get_current_user),
+    _rate=Depends(deps.rate_limit),
 ) -> Dict[str, List[Dict[str, Any]]]:
     if payload.type == "semantic":
         rows = recall_semantic(db=db, query=payload.query, limit=payload.limit)

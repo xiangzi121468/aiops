@@ -72,6 +72,7 @@ curl -X POST http://localhost:8000/api/v1/retrieve/hybrid ^
   -H "Content-Type: application/json" ^
   -d "{\"query\":\"monitoring automation\",\"top_k\":5}"
 ```
+说明：当前使用轻量 embedding 作为占位，检索质量仅用于链路验证。
 4) 记忆写入/召回：
 ```
 curl -X POST http://localhost:8000/api/v1/memory/record ^

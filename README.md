@@ -72,6 +72,7 @@ curl -X POST http://localhost:8000/api/v1/retrieve/hybrid ^
   -H "Content-Type: application/json" ^
   -d "{\"query\":\"monitoring automation\",\"top_k\":5}"
 ```
+Note: the current embedding is a lightweight placeholder for pipeline validation only.
 4) Memory record/recall:
 ```
 curl -X POST http://localhost:8000/api/v1/memory/record ^

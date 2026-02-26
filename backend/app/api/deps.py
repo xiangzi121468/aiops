@@ -1,5 +1,6 @@
 from typing import Generator, Optional
-from fastapi import Depends, HTTPException, status
+import time
+from fastapi import Depends, HTTPException, Request, status
 from fastapi.security import OAuth2PasswordBearer
 from jose import jwt, JWTError
 from sqlalchemy.orm import Session
@@ -46,4 +47,20 @@ def get_current_active_superuser(
             status_code=400, detail="The user doesn't have enough privileges"
         )
     return current_user
+
+
+_rate_limit_store = {}
+
+
+def rate_limit(request: Request, max_requests: int = 60, window_seconds: int = 60):
+    client_ip = request.client.host if request.client else "unknown"
+    now = time.time()
+    window_start = now - window_seconds
+
+    entries = _rate_limit_store.get(client_ip, [])
+    entries = [ts for ts in entries if ts >= window_start]
+    if len(entries) >= max_requests:
+        raise HTTPException(status_code=429, detail="Rate limit exceeded")
+    entries.append(now)
+    _rate_limit_store[client_ip] = entries
 

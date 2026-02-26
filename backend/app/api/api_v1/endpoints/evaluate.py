@@ -1,9 +1,10 @@
 from typing import Any, Dict, List
 
 from fastapi import APIRouter, Depends
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 from sqlalchemy.orm import Session
 
+from app.api import deps
 from app.db.session import get_db
 from app.retrieval.hybrid import hybrid_search
 
@@ -11,18 +12,21 @@ router = APIRouter()
 
 
 class EvalItem(BaseModel):
-    query: str
-    expected: str
+    query: str = Field(min_length=1, max_length=500)
+    expected: str = Field(min_length=1, max_length=500)
 
 
 class EvalRequest(BaseModel):
-    items: List[EvalItem]
-    top_k: int = 5
+    items: List[EvalItem] = Field(min_length=1, max_length=50)
+    top_k: int = Field(default=5, ge=1, le=20)
 
 
 @router.post("/evaluate/retrieval")
 def evaluate_retrieval(
-    payload: EvalRequest, db: Session = Depends(get_db)
+    payload: EvalRequest,
+    db: Session = Depends(get_db),
+    _user=Depends(deps.get_current_user),
+    _rate=Depends(deps.rate_limit),
 ) -> Dict[str, Any]:
     total = len(payload.items)
     hits = 0
