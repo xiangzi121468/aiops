@@ -88,6 +88,12 @@ curl -X POST http://localhost:8000/api/v1/evaluate/retrieval ^
   -H "Content-Type: application/json" ^
   -d "{\"items\":[{\"query\":\"monitoring\",\"expected\":\"automation\"}],\"top_k\":5}"
 ```
+6) LangGraph Agent 运行：
+```
+curl -X POST http://localhost:8000/api/v1/agent/run ^
+  -H "Content-Type: application/json" ^
+  -d "{\"query\":\"AIOps 的核心是什么\",\"top_k\":5}"
+```
 
 ## 🧪 UI 接入（本地测试页）
 

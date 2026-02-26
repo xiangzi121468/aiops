@@ -88,6 +88,12 @@ curl -X POST http://localhost:8000/api/v1/evaluate/retrieval ^
   -H "Content-Type: application/json" ^
   -d "{\"items\":[{\"query\":\"monitoring\",\"expected\":\"automation\"}],\"top_k\":5}"
 ```
+6) LangGraph Agent run:
+```
+curl -X POST http://localhost:8000/api/v1/agent/run ^
+  -H "Content-Type: application/json" ^
+  -d "{\"query\":\"What is the core of AIOps?\",\"top_k\":5}"
+```
 
 ## 🧪 UI Integration (Local test page)
 
