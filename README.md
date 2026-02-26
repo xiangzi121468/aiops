@@ -25,6 +25,7 @@ This project follows a dual-phase evolution path:
 *   **Hybrid Memory**:
     *   *Episodic*: Remembers past conversations (Vector DB).
     *   *Semantic*: Builds a structured profile of you (SQL).
+*   **Long-Term Memory Governance**: write triggers, recall priority, lifecycle, and approval workflow.
 *   **Git-Sync Knowledge Base**: Connects directly to your GitHub/GitLab repos to stay up-to-date.
 *   **Human-in-the-Loop**: "Aggressive" autonomy mode, but sensitive actions always pop up an "Approve/Deny" card.
 
