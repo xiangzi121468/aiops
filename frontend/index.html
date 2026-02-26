@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>AIOps MVP Console</title>
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <div class="container">
+      <h1>AIOps MVP Console</h1>
+      <p class="muted">用于测试知识采集 / 混合检索 / 记忆模块 / 评估接口</p>
+
+      <section>
+        <h2>1) 知识采集（/ingest/text）</h2>
+        <input id="ingest-source" placeholder="source (e.g. docs/notes.md)" />
+        <textarea id="ingest-content" rows="4" placeholder="content"></textarea>
+        <button id="ingest-btn">写入</button>
+        <pre id="ingest-result"></pre>
+      </section>
+
+      <section>
+        <h2>2) 混合检索（/retrieve/hybrid）</h2>
+        <input id="retrieve-query" placeholder="query" />
+        <input id="retrieve-topk" type="number" value="5" min="1" />
+        <button id="retrieve-btn">检索</button>
+        <pre id="retrieve-result"></pre>
+      </section>
+
+      <section>
+        <h2>3) 记忆写入（/memory/record）</h2>
+        <select id="memory-type">
+          <option value="semantic">semantic</option>
+          <option value="episodic">episodic</option>
+        </select>
+        <input id="memory-key" placeholder="key (semantic)" />
+        <input id="memory-value" placeholder="value (semantic)" />
+        <textarea id="memory-content" rows="3" placeholder="content (episodic)"></textarea>
+        <button id="memory-record-btn">写入</button>
+        <pre id="memory-record-result"></pre>
+      </section>
+
+      <section>
+        <h2>4) 记忆召回（/memory/recall）</h2>
+        <select id="recall-type">
+          <option value="semantic">semantic</option>
+          <option value="episodic">episodic</option>
+        </select>
+        <input id="recall-query" placeholder="query (semantic)" />
+        <input id="recall-limit" type="number" value="10" min="1" />
+        <button id="memory-recall-btn">召回</button>
+        <pre id="memory-recall-result"></pre>
+      </section>
+
+      <section>
+        <h2>5) 检索评估（/evaluate/retrieval）</h2>
+        <textarea id="eval-items" rows="4" placeholder='[{"query":"foo","expected":"bar"}]'></textarea>
+        <input id="eval-topk" type="number" value="5" min="1" />
+        <button id="eval-btn">评估</button>
+        <pre id="eval-result"></pre>
+      </section>
+    </div>
+
+    <script src="./app.js"></script>
+  </body>
+</html>

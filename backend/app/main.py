@@ -1,5 +1,9 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+from app.api.api_v1.api import api_router
+from app.core.config import settings
+from app.db.session import Base, engine
+from app.db import models  # noqa: F401
 
 app = FastAPI(
     title="AIOps Evolution Platform",
@@ -20,6 +24,13 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+@app.on_event("startup")
+def on_startup() -> None:
+    # Temporary init for dev; replace with Alembic migrations later.
+    Base.metadata.create_all(bind=engine)
+
+app.include_router(api_router, prefix=settings.API_V1_STR)
 
 @app.get("/health")
 async def health_check():
