@@ -57,6 +57,52 @@ This project follows a dual-phase evolution path:
 
 *(Coming Soon)*
 
+## ✅ Test Flow (MVP)
+
+1) Start backend: `uvicorn app.main:app --reload`  
+2) Ingest text:
+```
+curl -X POST http://localhost:8000/api/v1/ingest/text ^
+  -H "Content-Type: application/json" ^
+  -d "{\"source\":\"docs/demo.md\",\"content\":\"AIOps is about monitoring and automation.\"}"
+```
+3) Hybrid retrieval:
+```
+curl -X POST http://localhost:8000/api/v1/retrieve/hybrid ^
+  -H "Content-Type: application/json" ^
+  -d "{\"query\":\"monitoring automation\",\"top_k\":5}"
+```
+4) Memory record/recall:
+```
+curl -X POST http://localhost:8000/api/v1/memory/record ^
+  -H "Content-Type: application/json" ^
+  -d "{\"type\":\"semantic\",\"key\":\"preferred_language\",\"value\":\"Python\"}"
+
+curl -X POST http://localhost:8000/api/v1/memory/recall ^
+  -H "Content-Type: application/json" ^
+  -d "{\"type\":\"semantic\",\"query\":\"preferred\",\"limit\":5}"
+```
+5) Retrieval evaluation:
+```
+curl -X POST http://localhost:8000/api/v1/evaluate/retrieval ^
+  -H "Content-Type: application/json" ^
+  -d "{\"items\":[{\"query\":\"monitoring\",\"expected\":\"automation\"}],\"top_k\":5}"
+```
+6) LangGraph Agent run:
+```
+curl -X POST http://localhost:8000/api/v1/agent/run ^
+  -H "Content-Type: application/json" ^
+  -d "{\"query\":\"What is the core of AIOps?\",\"top_k\":5}"
+```
+
+## 🧪 UI Integration (Local test page)
+
+```
+cd frontend
+python -m http.server 5173
+```
+Open `http://localhost:5173` in your browser to test ingest/retrieve/memory/evaluation.
+
 ## 📄 Documentation
 
 *   [Implementation Plan](./docs/实施计划.md)

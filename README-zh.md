@@ -57,6 +57,52 @@
 
 *(即将推出)*
 
+## ✅ 测试流程（MVP）
+
+1) 启动后端：`uvicorn app.main:app --reload`  
+2) 文本入库（知识采集）：
+```
+curl -X POST http://localhost:8000/api/v1/ingest/text ^
+  -H "Content-Type: application/json" ^
+  -d "{\"source\":\"docs/demo.md\",\"content\":\"AIOps is about monitoring and automation.\"}"
+```
+3) 混合检索：
+```
+curl -X POST http://localhost:8000/api/v1/retrieve/hybrid ^
+  -H "Content-Type: application/json" ^
+  -d "{\"query\":\"monitoring automation\",\"top_k\":5}"
+```
+4) 记忆写入/召回：
+```
+curl -X POST http://localhost:8000/api/v1/memory/record ^
+  -H "Content-Type: application/json" ^
+  -d "{\"type\":\"semantic\",\"key\":\"preferred_language\",\"value\":\"Python\"}"
+
+curl -X POST http://localhost:8000/api/v1/memory/recall ^
+  -H "Content-Type: application/json" ^
+  -d "{\"type\":\"semantic\",\"query\":\"preferred\",\"limit\":5}"
+```
+5) 检索评估：
+```
+curl -X POST http://localhost:8000/api/v1/evaluate/retrieval ^
+  -H "Content-Type: application/json" ^
+  -d "{\"items\":[{\"query\":\"monitoring\",\"expected\":\"automation\"}],\"top_k\":5}"
+```
+6) LangGraph Agent 运行：
+```
+curl -X POST http://localhost:8000/api/v1/agent/run ^
+  -H "Content-Type: application/json" ^
+  -d "{\"query\":\"AIOps 的核心是什么\",\"top_k\":5}"
+```
+
+## 🧪 UI 接入（本地测试页）
+
+```
+cd frontend
+python -m http.server 5173
+```
+浏览器打开 `http://localhost:5173`，即可进行知识采集/检索/记忆与评估的基础操作。
+
 ## 📄 文档索引
 
 *   [实施计划 (Implementation Plan)](./docs/实施计划.md)
